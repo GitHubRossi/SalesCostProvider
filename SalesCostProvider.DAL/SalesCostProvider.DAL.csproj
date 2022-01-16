@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -13,6 +13,9 @@
     <Compile Update="DB\Interface\IProductIn.cs">
       <Generator>exempt</Generator>
     </Compile>
+    <Compile Update="DB\Interface\IInComeModel.cs">
+      <Generator>exempt</Generator>
+    </Compile>
     <Compile Update="DB\Models\ProductIn.cs">
       <Generator>exempt</Generator>
     </Compile>
@@ -20,6 +23,12 @@
       <Generator>exempt</Generator>
     </Compile>
     <Compile Update="DB\Interface\IProductOut.cs">
+      <Generator>exempt</Generator>
+    </Compile>
+    <Compile Update="DB\Models\OutModel.cs">
+      <Generator>exempt</Generator>
+    </Compile>
+    <Compile Update="DB\Models\OutProduct.cs">
       <Generator>exempt</Generator>
     </Compile>
     <Compile Update="DB\Models\ResultModel.cs">

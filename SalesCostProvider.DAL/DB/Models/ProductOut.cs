@@ -8,7 +8,6 @@ namespace SalesCostProvider.Models.DB
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [NotMapped]
         public long Id { get; set; }
         public string Name { get; set; }
         public double Cost { get; set; }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SalesCostProvider.DAL;
+using SalesCostProvider.Models.DB;
 using SalesCostProvider.SL.Services;
 
 namespace SalesCostProvider
@@ -25,9 +26,9 @@ namespace SalesCostProvider
 
             services.AddControllersWithViews();
 
-            services.AddScoped<ICostProvider, CostProvider>();
-
             services.AddScoped<Repository>();
+
+            services.AddScoped<ICostProvider, CostProvider>();
 
             services.AddScoped<IServicesSL, ServicesSL>();
 

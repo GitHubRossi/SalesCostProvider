@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using NLog;
 using SalesCostProvider.DAL;
 using SalesCostProvider.Models.DB;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SalesCostProvider.SL.Services
@@ -10,7 +11,7 @@ namespace SalesCostProvider.SL.Services
     public class ServicesSL : IServicesSL
     {
         Repository _rep;
-        ILogger<ServicesSL> _logger;
+        private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         ICostProvider _costProvider;
 
         public ServicesSL(Repository rep, ICostProvider costProvider)
@@ -20,37 +21,41 @@ namespace SalesCostProvider.SL.Services
         }
 
         #region Public Methods
-        public async Task<ResultModel> CostProcessing(InComeModel model)
+        public async Task<OutModel> CostProcessing(IInComeModel model)
         {
-            ResultModel result = new ResultModel();
+            OutModel resultOut = new OutModel();
             try
             {
-                result = await _costProvider.CostProcessing(model);
+                var outModel = await _costProvider.CostProcessing(model);
+                resultOut.FinalCost = outModel.FinalCost;
+                var dataProducts = outModel.ProductsOut.Select(s => new OutProduct { Cost = s.Cost, Name = s.Name }).ToList();
+                resultOut.ProductsOut = dataProducts;
+                await StoreModels(model, outModel);
+                return resultOut;
             }            
             catch (Exception ex)
             {
-                _logger.LogError($"Unexpected error ex={ex.Demystify()}");
+                _logger.Error($"Unexpected error ex={ex.Demystify()}");
                 throw;
             }
-            await StoreModels(model, result);
-            return result;
         }
         #endregion
 
         #region Private methods
-        private async Task<bool> StoreModels(InComeModel modelIn, ResultModel modelOut)
+        private async Task<bool> StoreModels(IInComeModel modelIn, ResultModel modelOut)
         {
             ResultModel result = new ResultModel();
             try
             {
-                _rep._context.IncomeModels.Add(modelIn);
+                InComeModel inModel = new InComeModel();
+                _rep._context.IncomeModels.Add(inModel);
                 _rep._context.ResultModels.Add(modelOut);
                 await _rep._context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Unexpected error ex={ex.Demystify()}");
+                _logger.Error($"Unexpected error ex={ex.Demystify()}");
                 throw;
             }                        
         }

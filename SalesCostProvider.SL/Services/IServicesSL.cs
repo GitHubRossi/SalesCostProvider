@@ -5,6 +5,6 @@ namespace SalesCostProvider.SL.Services
 {
     public interface IServicesSL
     {
-        public Task<ResultModel> CostProcessing(InComeModel model);
+        public Task<OutModel> CostProcessing(IInComeModel model);
     }    
 }

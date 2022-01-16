@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace SalesCostProvider.Models.DB
 {
-    public class ResultModel
+    public class OutModel
     {
-        public long Id { get; set; }
         public double FinalCost { get; set; }
-        [ForeignKey("ProductOutFK")]
         [NotMapped]
-        public virtual IEnumerable<ProductOut> ProductsOut  {get;set;}
+        public virtual IEnumerable<OutProduct> ProductsOut  {get;set;}
     }
 }

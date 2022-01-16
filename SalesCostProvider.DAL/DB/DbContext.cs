@@ -10,7 +10,7 @@ namespace SalesCostProvider.DB
         public CostProviderDbContext(IConfiguration configuration) : base()
         {
             Configuration = configuration;
-            Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
             ChangeTracker.LazyLoadingEnabled = false;
         }
@@ -38,8 +38,6 @@ namespace SalesCostProvider.DB
             .Property(i => i.Id)
             .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<ProductIn>(entity =>
-            entity.ToTable("ProductOut"));
 
             modelBuilder.Entity<ProductOut>()
             .Property(i => i.Id)
@@ -76,6 +74,7 @@ namespace SalesCostProvider.DB
             modelBuilder.Entity<ResultModel>()
             .Property(i => i.Id)
             .ValueGeneratedOnAdd();
+
         }
 
         public DbSet<ProductIn> IN_Products { get; set; }

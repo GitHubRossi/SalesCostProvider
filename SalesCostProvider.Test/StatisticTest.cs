@@ -20,17 +20,17 @@ namespace SalesCostProvider.Test
         
         public async void TestInit()
         {
-            await UnitTest1();
+            //await UnitTest1();
         }
 
-        [TestMethod]
-        async Task<ResultModel> UnitTest1()
-        {            
-            var dataSet = _rep._context.IncomeModels.First();
+        //[TestMethod]
+        //async Task<ResultModel> UnitTest1()
+        //{            
+        //    var dataSet = _rep._context.IncomeModels.First();
 
-            CostProvider provider = new CostProvider();
+        //    CostProvider provider = new CostProvider();
 
-            return await provider.CostProcessing(dataSet);            
-        }
+        //    return await provider.CostProcessing(dataSet);            
+        //}
     }
 }

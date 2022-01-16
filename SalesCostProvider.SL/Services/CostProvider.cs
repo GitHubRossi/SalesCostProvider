@@ -10,7 +10,7 @@ namespace SalesCostProvider.SL.Services
         private bool E_Margin { get; set; }
         #region Public Methods     
 
-        public async Task<ResultModel> CostProcessing(InComeModel inputModel)
+        public async Task<ResultModel> CostProcessing(IInComeModel inputModel)
         {
             E_Margin = inputModel.EMargin;
                         
@@ -28,22 +28,23 @@ namespace SalesCostProvider.SL.Services
         #endregion
 
         #region Private Methods     
-        public async Task<IEnumerable<IProductOut>> TaxProcessing(IEnumerable<IProductIn> products)
+        public async Task<IEnumerable<ProductOut>> TaxProcessing(IEnumerable<IProductIn> products)
         {            
-            Task<List<IProductOut>> AsyncProcess = Task.Run(() =>
+            Task<List<ProductOut>> AsyncProcess = Task.Run(() =>
             {
-                List<IProductOut> ListTaxedProducts = new List<IProductOut>();
+                List<ProductOut> ListTaxedProducts = new List<ProductOut>();
                 foreach (var p in products)
                 {
                     var product = new ProductOut();
+                    product.Name = p.Name;
                     // with ExtraTax??
-                    if (p.ETax)
+                    if (p.STax)
                     {
-                        product.Cost = Math.Round((p.Cost / 100) * 107);
+                        product.Cost = Math.Round((p.Cost / 100) * 107,2);
                     }
                     else
                     {
-                        product.Cost = Math.Round(p.Cost);
+                        product.Cost = Math.Round(p.Cost,2);
                     }
                     ListTaxedProducts.Add(product);
                 }
@@ -64,11 +65,11 @@ namespace SalesCostProvider.SL.Services
                     // with ExtraMargin??
                     if (E_Margin)
                     {
-                        product.Cost = (p.Cost / 100) * 116;
+                        product.Cost = Math.Round((p.Cost / 100) * 116,2);
                     }
                     else
                     {
-                        product.Cost = (p.Cost / 100) * 111;
+                        product.Cost = Math.Round((p.Cost / 100) * 111,2);
                     }
                     ListTaxedProducts.Add(product);
                 }
