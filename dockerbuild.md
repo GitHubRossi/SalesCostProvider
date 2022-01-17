@@ -1,0 +1,1 @@
+docker build -t salescostprovider:0.10 .
