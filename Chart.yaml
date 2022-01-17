@@ -1,0 +1,10 @@
+apiVersion: v1
+description: Sales Cost Provider
+maintainers:
+- email: email@email.cz
+  name: SalesCostProvider
+name: SalesCostProvider
+version: 0.1.0
+appVersion: 0.1.0
+sources:
+  - https://github.com/GitHubRossi/SalesCostProvider
