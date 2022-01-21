@@ -31,16 +31,8 @@ namespace SalesCostProvider.Controllers
         [HttpPost, Route("costproductsprovider")]
         public async Task<OutModel> CostProductsProvider(InComeModel incomeModeln)
         {
-            try
-            {
-                  return await _servicesSL.CostProcessing(incomeModeln);
-            }
-          
-             catch (Exception ex)
-            {
-                _logger.Error($"Unexpected error ex={ex.Demystify()}");
-                throw;
-            }
+                       
+             return await _servicesSL.CostProcessing(incomeModeln);                      
 
         }
     }

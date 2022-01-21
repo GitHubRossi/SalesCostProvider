@@ -10,11 +10,11 @@ namespace SalesCostProvider.SL.Services
 {
     public class ServicesSL : IServicesSL
     {
-        Repository _rep;
+        IRepository _rep;
         private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         ICostProvider _costProvider;
 
-        public ServicesSL(Repository rep, ICostProvider costProvider)
+        public ServicesSL(IRepository rep, ICostProvider costProvider)
         {
             _rep = rep;
             _costProvider = costProvider;
@@ -48,9 +48,9 @@ namespace SalesCostProvider.SL.Services
             try
             {
                 InComeModel inModel = new InComeModel();
-                _rep._context.IncomeModels.Add(inModel);
-                _rep._context.ResultModels.Add(modelOut);
-                await _rep._context.SaveChangesAsync();
+                _rep.getContext().IncomeModels.Add(inModel);
+                _rep.getContext().ResultModels.Add(modelOut);
+                await _rep.getContext().SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)

@@ -16,28 +16,28 @@
     <Compile Update="DB\Interface\IInComeModel.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\ProductIn.cs">
+    <Compile Update="DB\Models\IN\ProductIn.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\InComeModel.cs">
+    <Compile Update="DB\Models\IN\InComeModel.cs">
       <Generator>exempt</Generator>
     </Compile>
     <Compile Update="DB\Interface\IProductOut.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\OutModel.cs">
+    <Compile Update="DB\Models\OUT\OutModel.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\OutProduct.cs">
+    <Compile Update="DB\Models\OUT\OutProduct.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\ResultModel.cs">
+    <Compile Update="DB\Models\OUT\ResultModel.cs">
       <Generator>exempt</Generator>
     </Compile>
     <Compile Update="DB\Interface\IExtendedProduct.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\ProductOut.cs">
+    <Compile Update="DB\Models\OUT\ProductOut.cs">
       <Generator>exempt</Generator>
     </Compile>
   </ItemGroup>

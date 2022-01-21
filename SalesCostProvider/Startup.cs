@@ -26,7 +26,7 @@ namespace SalesCostProvider
 
             services.AddControllersWithViews();
 
-            services.AddScoped<Repository>();
+            services.AddScoped<IRepository,Repository>();
 
             services.AddScoped<ICostProvider, CostProvider>();
 

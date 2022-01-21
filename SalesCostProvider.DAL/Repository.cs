@@ -5,12 +5,17 @@ using System.Threading.Tasks;
 
 namespace SalesCostProvider.DAL
 {
-    public class Repository
+    public class Repository:IRepository
     {
         public CostProviderDbContext _context;        
         public Repository(IConfiguration configuration)
         {
             _context =  new CostProviderDbContext(configuration);
+        }
+
+        public CostProviderDbContext getContext()
+        {
+            return _context;
         }
 
         public async Task<ResultModel> ResultModelSaving(ResultModel resultModel)
