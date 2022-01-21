@@ -7,7 +7,7 @@ namespace SalesCostProvider.DAL
 {
     public interface IRepository
     {
-        public CostProviderDbContext getContext();
         public Task<ResultModel> ResultModelSaving(ResultModel resultModel);
+        public Task<ResultModel> IncomeModelSaving(InComeModel incomeModel);
     }
 }

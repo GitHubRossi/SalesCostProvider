@@ -18,7 +18,7 @@ namespace SalesCostProvider.SL.Services
 
             var productsWithTax = await TaxProcessing(inputModel.Products);
 
-            result.FinalCost = await GetFinalCost(inputModel.Products, productsWithTax);
+            result.FinalCost =  GetFinalCost(inputModel.Products, productsWithTax);
 
             result.ProductsOut = productsWithTax;
 
@@ -53,11 +53,9 @@ namespace SalesCostProvider.SL.Services
             return await AsyncProcess;            
         }
 
-        public async Task<double> GetFinalCost(IEnumerable<IProductIn> products, IEnumerable<IProductOut> productsWithTax)
+        public double GetFinalCost(IEnumerable<IProductIn> products, IEnumerable<IProductOut> productsWithTax)
         {
             double finalCost = 0;
-            Task<List<IProductOut>> AsyncAddMargin = Task.Run(() =>
-            {
                 List<IProductOut> ListTaxedProducts = new List<IProductOut>();
                 foreach (var p in products)
                 {
@@ -73,8 +71,6 @@ namespace SalesCostProvider.SL.Services
                     }
                     ListTaxedProducts.Add(product);
                 }
-                return ListTaxedProducts;
-            });
 
             double costProduct = 0;
             foreach(var p in products)
@@ -90,15 +86,13 @@ namespace SalesCostProvider.SL.Services
 
             var additionalTax = costProductWithTax - costProduct;
 
-
-            var taxedProducts = await AsyncAddMargin;
+            var taxedProducts = ListTaxedProducts;
 
             double costWithMaring = 0;
             foreach (var p in taxedProducts)
             {
                 costWithMaring += p.Cost;
             }
-
 
             finalCost = costWithMaring + additionalTax;
 

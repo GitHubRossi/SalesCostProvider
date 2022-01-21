@@ -48,9 +48,8 @@ namespace SalesCostProvider.SL.Services
             try
             {
                 InComeModel inModel = new InComeModel();
-                _rep.getContext().IncomeModels.Add(inModel);
-                _rep.getContext().ResultModels.Add(modelOut);
-                await _rep.getContext().SaveChangesAsync();
+                await _rep.IncomeModelSaving(inModel);
+                await _rep.ResultModelSaving(modelOut);              
                 return true;
             }
             catch (Exception ex)

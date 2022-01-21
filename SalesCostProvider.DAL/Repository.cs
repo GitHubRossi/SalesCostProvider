@@ -1,33 +1,71 @@
 ﻿using Microsoft.Extensions.Configuration;
+using NLog;
 using SalesCostProvider.DB;
 using SalesCostProvider.Models.DB;
+using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace SalesCostProvider.DAL
 {
-    public class Repository:IRepository
+    public class Repository : IRepository
     {
-        public CostProviderDbContext _context;        
+        private IConfiguration _configuration;
+        private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         public Repository(IConfiguration configuration)
         {
-            _context =  new CostProviderDbContext(configuration);
-        }
-
-        public CostProviderDbContext getContext()
-        {
-            return _context;
+            _configuration = configuration;
         }
 
         public async Task<ResultModel> ResultModelSaving(ResultModel resultModel)
         {
-            ResultModel data = new ResultModel();
 
-            await _context.ResultModels.AddAsync(resultModel);
+            try
+            {
+                ResultModel data = new ResultModel();
 
-            await _context.SaveChangesAsync();
+                using (var _context = new CostProviderDbContext(_configuration))
+                {
 
-            return data;            
+                    await _context.ResultModels.AddAsync(resultModel);
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return data;
+            }
+
+            catch (Exception ex)
+            {
+                _logger.Error($"Unexpected error ex={ex.Demystify()}");
+                throw;
+            }
         }
-      
+        public async Task<ResultModel> IncomeModelSaving(InComeModel incomeModel)
+        {
+
+            try
+            {
+                ResultModel data = new ResultModel();
+
+                using (var _context = new CostProviderDbContext(_configuration))
+                {
+
+                    await _context.IncomeModels.AddAsync(incomeModel);
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return data;
+            }
+
+            catch (Exception ex)
+            {
+                _logger.Error($"Unexpected error ex={ex.Demystify()}");
+                throw;
+            }
+        }
+
     }
+
 }
