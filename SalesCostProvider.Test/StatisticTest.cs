@@ -10,9 +10,9 @@ namespace SalesCostProvider.Test
     [TestClass]
     class StatisticTest
     {        
-        private Repository _rep { get; set; }
+        private IRepository _rep { get; set; }
         
-        public  StatisticTest(Repository rep)
+        public  StatisticTest(IRepository rep)
         {
             _rep = rep;
         }
@@ -20,17 +20,19 @@ namespace SalesCostProvider.Test
         
         public async void TestInit()
         {
-            //await UnitTest1();
+            await UnitTest1();
         }
 
-        //[TestMethod]
-        //async Task<ResultModel> UnitTest1()
-        //{            
-        //    var dataSet = _rep._context.IncomeModels.First();
+        [TestMethod]
+        async Task<ResultModel> UnitTest1()
+        {
+            var dataSet = await _rep.GetIncomeModels();
 
-        //    CostProvider provider = new CostProvider();
+            Assert.IsNotNull(dataSet);
 
-        //    return await provider.CostProcessing(dataSet);            
-        //}
+            CostProvider provider = new CostProvider();
+
+            return await provider.CostProcessing(dataSet.First());
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace SalesCostProvider.Test
 
             services.AddScoped<ICostProvider, CostProvider>();
 
-            services.AddScoped<Repository>();
+            services.AddScoped<IRepository,Repository>();
 
             services.AddScoped<IServicesSL, ServicesSL>();
 

@@ -10,13 +10,13 @@ namespace SalesCostProvider.SL.Services
         private bool E_Margin { get; set; }
         #region Public Methods     
 
-        public async Task<ResultModel> CostProcessing(IInComeModel inputModel)
+        public  Task<ResultModel> CostProcessing(IInComeModel inputModel)
         {
             E_Margin = inputModel.EMargin;
                         
             ResultModel result = new ResultModel();
 
-            var productsWithTax = await TaxProcessing(inputModel.Products);
+            var productsWithTax =  TaxProcessing(inputModel.Products);
 
             result.FinalCost =  GetFinalCost(inputModel.Products, productsWithTax);
 
@@ -28,10 +28,8 @@ namespace SalesCostProvider.SL.Services
         #endregion
 
         #region Private Methods     
-        public async Task<IEnumerable<ProductOut>> TaxProcessing(IEnumerable<IProductIn> products)
+        public async IEnumerable<ProductOut> TaxProcessing(IEnumerable<IProductIn> products)
         {            
-            Task<List<ProductOut>> AsyncProcess = Task.Run(() =>
-            {
                 List<ProductOut> ListTaxedProducts = new List<ProductOut>();
                 foreach (var p in products)
                 {
@@ -48,9 +46,7 @@ namespace SalesCostProvider.SL.Services
                     }
                     ListTaxedProducts.Add(product);
                 }
-                return ListTaxedProducts;
-            });
-            return await AsyncProcess;            
+                return ListTaxedProducts;          
         }
 
         public double GetFinalCost(IEnumerable<IProductIn> products, IEnumerable<IProductOut> productsWithTax)

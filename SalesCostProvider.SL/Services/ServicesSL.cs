@@ -26,7 +26,7 @@ namespace SalesCostProvider.SL.Services
             OutModel resultOut = new OutModel();
             try
             {
-                var outModel = await _costProvider.CostProcessing(model);
+                var outModel =  _costProvider.CostProcessing(model);
                 resultOut.FinalCost = outModel.FinalCost;
                 var dataProducts = outModel.ProductsOut.Select(s => new OutProduct { Cost = s.Cost, Name = s.Name }).ToList();
                 resultOut.ProductsOut = dataProducts;

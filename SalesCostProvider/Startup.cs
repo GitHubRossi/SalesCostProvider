@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SalesCostProvider.DAL;
+using SalesCostProvider.DB;
 using SalesCostProvider.Models.DB;
 using SalesCostProvider.SL.Services;
 
@@ -25,6 +27,9 @@ namespace SalesCostProvider
         {
 
             services.AddControllersWithViews();
+
+            services.AddDbContext<CostProviderDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("CostProviderDbConnectionString")));
 
             services.AddScoped<IRepository,Repository>();
 

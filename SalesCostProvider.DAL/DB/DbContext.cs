@@ -16,7 +16,6 @@ namespace SalesCostProvider.DB
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {            
-            optionsBuilder.UseSqlServer(Configuration.GetConnectionString("CostProviderDbConnectionString"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

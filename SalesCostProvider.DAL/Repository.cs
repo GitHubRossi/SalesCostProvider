@@ -5,6 +5,9 @@ using SalesCostProvider.Models.DB;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace SalesCostProvider.DAL
 {
@@ -57,6 +60,27 @@ namespace SalesCostProvider.DAL
                 }
 
                 return data;
+            }
+
+            catch (Exception ex)
+            {
+                _logger.Error($"Unexpected error ex={ex.Demystify()}");
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<IInComeModel>> GetIncomeModels()
+        {
+
+            try
+            {
+                ResultModel data = new ResultModel();
+
+                using (var _context = new CostProviderDbContext(_configuration))
+                {
+
+                    return await _context.IncomeModels.ToListAsync();
+                }
             }
 
             catch (Exception ex)
