@@ -9,77 +9,46 @@ namespace SalesCostProvider.DB
         IConfiguration Configuration { get; set; }
         public CostProviderDbContext(IConfiguration configuration) : base()
         {
-            Configuration = configuration;
-            //Database.EnsureDeleted();
-            Database.EnsureCreated();
+            Configuration = configuration;                                    
             ChangeTracker.LazyLoadingEnabled = false;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {            
+        {
+            optionsBuilder.UseSqlServer(Configuration.GetConnectionString("CostProviderDbConnectionString"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ProductIn>(entity =>
-            entity.ToTable("ProductIn"));
+            modelBuilder.Entity<InProduct>(entity =>
+            entity.ToTable("IN_Products").Property(typeof(long), "Id").ValueGeneratedOnAdd());
+            modelBuilder.Entity<InProduct>(entity =>
+            entity.HasIndex("Id"));
+            modelBuilder.Entity<InProduct>().HasOne(p => p.InComeModelId)
+            .WithMany(b => b.Products);
 
-            modelBuilder.Entity<ProductIn>()
-            .HasKey(b => b.Id);
+            modelBuilder.Entity<OutProduct>(entity =>
+            entity.ToTable("OUT_Products").Property(typeof(long), "Id").ValueGeneratedOnAdd());
+            modelBuilder.Entity<OutProduct>(entity =>
+             entity.HasIndex("Id"));
+            modelBuilder.Entity<OutProduct>().HasOne(p => p.OutModelId)
+            .WithMany(b => b.ProductsOut);
 
-            modelBuilder.Entity<ProductOut>()
-            .HasKey(b => b.Id);
+            modelBuilder.Entity<OutModel>(entity =>
+            entity.ToTable("OUT_Models").Property(typeof(long), "Id").ValueGeneratedOnAdd());
+            modelBuilder.Entity<OutModel>(entity =>
+            entity.HasIndex("Id"));
 
-            modelBuilder.Entity<ProductOut>()
-            .HasIndex(u => u.Id)
-            .IsUnique();
-            
-            modelBuilder.Entity<ProductIn>()
-            .Property(i => i.Id)
-            .ValueGeneratedOnAdd();
-
-
-            modelBuilder.Entity<ProductOut>()
-            .Property(i => i.Id)
-            .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<ProductOut>()
-            .Property(i => i.Id)
-            .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<InComeModel>(entity =>
-            entity.ToTable("InComeModel"));
-
-            modelBuilder.Entity<InComeModel>()
-            .HasKey(b => b.Id);
-
-            modelBuilder.Entity<InComeModel>()
-            .Property(i => i.Id)
-            .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<InComeModel>()
-            .Property(i => i.Id)
-            .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<ResultModel>(entity =>
-            entity.ToTable("ResultModel"));
-
-            modelBuilder.Entity<ResultModel>()
-            .HasKey(b => b.Id);
-
-            modelBuilder.Entity<ResultModel>()
-            .Property(i => i.Id)
-            .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<ResultModel>()
-            .Property(i => i.Id)
-            .ValueGeneratedOnAdd();
-
+            entity.ToTable("IN_Models").Property(typeof(long), "Id").ValueGeneratedOnAdd());
+            modelBuilder.Entity<InComeModel>(entity =>
+            entity.HasIndex("Id"));
         }
 
-        public DbSet<ProductIn> IN_Products { get; set; }
-        public DbSet<ProductOut> OUT_Produtcts { get; set; }
+        public DbSet<InProduct> IN_Products { get; set; }
+        public DbSet<OutProduct> OUT_Produtcts { get; set; }
 
-        public DbSet<InComeModel> IncomeModels { get; set; }
-        public DbSet<ResultModel> ResultModels { get; set; }
+        public DbSet<InComeModel> IN_Models { get; set; }
+        public DbSet<OutModel> OUT_Models { get; set; }
     }
 }

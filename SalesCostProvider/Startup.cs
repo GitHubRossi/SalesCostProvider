@@ -10,6 +10,8 @@ using SalesCostProvider.DAL;
 using SalesCostProvider.DB;
 using SalesCostProvider.Models.DB;
 using SalesCostProvider.SL.Services;
+using SalesCostProvider.SL.Services.Providers;
+
 
 namespace SalesCostProvider
 {
@@ -26,13 +28,15 @@ namespace SalesCostProvider
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddDbContext<CostProviderDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("CostProviderDbConnectionString")));
 
             services.AddScoped<IRepository,Repository>();
 
+            services.AddScoped<IOutModelProvider, OutModelProvider>();
+             
             services.AddScoped<ICostProvider, CostProvider>();
 
             services.AddScoped<IServicesSL, ServicesSL>();

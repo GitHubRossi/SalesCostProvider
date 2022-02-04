@@ -12,34 +12,34 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="DB\Interface\IProductIn.cs">
+    <Compile Update="DB\Interface\IModels\IInComeModel .cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Interface\IInComeModel.cs">
+    <Compile Update="DB\Interface\IProducts\IProduct.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\IN\ProductIn.cs">
+    <Compile Update="DB\Interface\IModels\IOutModel.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\IN\InComeModel.cs">
+    <Compile Update="DB\Models\Products\ExemptProduct.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Interface\IProductOut.cs">
+    <Compile Update="DB\Models\Products\Product.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\OUT\OutModel.cs">
+    <Compile Update="DB\Models\Products\InProduct.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\OUT\OutProduct.cs">
+    <Compile Update="DB\Models\Models\InComeModel.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\OUT\ResultModel.cs">
+    <Compile Update="DB\Models\Models\OutModel.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Interface\IExtendedProduct.cs">
+    <Compile Update="DB\Interface\IProducts\IExemptProduct.cs">
       <Generator>exempt</Generator>
     </Compile>
-    <Compile Update="DB\Models\OUT\ProductOut.cs">
+    <Compile Update="DB\Models\Products\OutProduct.cs">
       <Generator>exempt</Generator>
     </Compile>
   </ItemGroup>

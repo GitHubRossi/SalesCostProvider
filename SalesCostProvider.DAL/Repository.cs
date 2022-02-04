@@ -15,27 +15,51 @@ namespace SalesCostProvider.DAL
     {
         private IConfiguration _configuration;
         private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-        public Repository(IConfiguration configuration)
+        CostProviderDbContext _context;
+
+        public Repository(IConfiguration configuration, CostProviderDbContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
 
-        public async Task<ResultModel> ResultModelSaving(ResultModel resultModel)
+        public async Task<bool> ResultModelSaving(OutModel outModel)
         {
-
             try
             {
-                ResultModel data = new ResultModel();
+                    await _context.OUT_Models.AddAsync(outModel);
 
-                using (var _context = new CostProviderDbContext(_configuration))
-                {
+                    var success = await _context.SaveChangesAsync();
 
-                    await _context.ResultModels.AddAsync(resultModel);
+                    return (success > 0);                
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Unexpected error ex={ex.Demystify()}");
+                throw;
+            }
+        }
+        public async Task<bool> IncomeModelSaving(InComeModel incomeModel)
+        {
+            try
+            {
+                    await _context.IN_Models.AddAsync(incomeModel);
 
-                    await _context.SaveChangesAsync();
-                }
+                    var success = await _context.SaveChangesAsync();
 
-                return data;
+                    return (success > 0);                
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Unexpected error ex={ex.Demystify()}");
+                throw;
+            }
+        }
+        public async Task<IEnumerable<InComeModel>> GetIncomeModels()
+        {
+            try
+            {
+                 return await _context.IN_Models.ToListAsync();                
             }
 
             catch (Exception ex)
@@ -44,52 +68,6 @@ namespace SalesCostProvider.DAL
                 throw;
             }
         }
-        public async Task<ResultModel> IncomeModelSaving(InComeModel incomeModel)
-        {
-
-            try
-            {
-                ResultModel data = new ResultModel();
-
-                using (var _context = new CostProviderDbContext(_configuration))
-                {
-
-                    await _context.IncomeModels.AddAsync(incomeModel);
-
-                    await _context.SaveChangesAsync();
-                }
-
-                return data;
-            }
-
-            catch (Exception ex)
-            {
-                _logger.Error($"Unexpected error ex={ex.Demystify()}");
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<IInComeModel>> GetIncomeModels()
-        {
-
-            try
-            {
-                ResultModel data = new ResultModel();
-
-                using (var _context = new CostProviderDbContext(_configuration))
-                {
-
-                    return await _context.IncomeModels.ToListAsync();
-                }
-            }
-
-            catch (Exception ex)
-            {
-                _logger.Error($"Unexpected error ex={ex.Demystify()}");
-                throw;
-            }
-        }
-
     }
 
 }

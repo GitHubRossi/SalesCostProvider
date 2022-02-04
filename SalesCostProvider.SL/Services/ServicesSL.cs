@@ -21,18 +21,27 @@ namespace SalesCostProvider.SL.Services
         }
 
         #region Public Methods
-        public async Task<OutModel> CostProcessing(IInComeModel model)
+        public OutModel CostProcessing(InComeModel inComeModel)
         {
-            OutModel resultOut = new OutModel();
             try
             {
-                var outModel =  _costProvider.CostProcessing(model);
-                resultOut.FinalCost = outModel.FinalCost;
-                var dataProducts = outModel.ProductsOut.Select(s => new OutProduct { Cost = s.Cost, Name = s.Name }).ToList();
-                resultOut.ProductsOut = dataProducts;
-                await StoreModels(model, outModel);
-                return resultOut;
+                var outModel =  _costProvider.GetOutputCostModel(inComeModel);                          
+                return outModel;
             }            
+            catch (Exception ex)
+            {
+                _logger.Error($"Unexpected error ex={ex.Demystify()}");
+                throw;
+            }
+        }
+        public async Task<bool> StoreModels(InComeModel inModel, OutModel modelOut)
+        {
+            try
+            {
+                await _rep.IncomeModelSaving(inModel);
+                await _rep.ResultModelSaving(modelOut);
+                return true;
+            }
             catch (Exception ex)
             {
                 _logger.Error($"Unexpected error ex={ex.Demystify()}");
@@ -42,22 +51,7 @@ namespace SalesCostProvider.SL.Services
         #endregion
 
         #region Private methods
-        private async Task<bool> StoreModels(IInComeModel modelIn, ResultModel modelOut)
-        {
-            ResultModel result = new ResultModel();
-            try
-            {
-                InComeModel inModel = new InComeModel();
-                await _rep.IncomeModelSaving(inModel);
-                await _rep.ResultModelSaving(modelOut);              
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"Unexpected error ex={ex.Demystify()}");
-                throw;
-            }                        
-        }
+
         #endregion
     }
 }

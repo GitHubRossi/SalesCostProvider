@@ -1,100 +1,90 @@
 ﻿using SalesCostProvider.Models.DB;
+using SalesCostProvider.SL.Services.Providers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SalesCostProvider.SL.Services
 {
-    public class CostProvider:ICostProvider
+    public class CostProvider : ICostProvider
     {
         private bool E_Margin { get; set; }
-        #region Public Methods     
+        private IOutModelProvider _outModelProvider { set; get; }
 
-        public  Task<ResultModel> CostProcessing(IInComeModel inputModel)
+        public CostProvider(IOutModelProvider outModelProvider)
+        {
+            _outModelProvider = outModelProvider;
+        }
+        #region Public Methods     
+        public OutModel GetOutputCostModel(IInComeModel inputModel)
         {
             E_Margin = inputModel.EMargin;
-                        
-            ResultModel result = new ResultModel();
 
-            var productsWithTax =  TaxProcessing(inputModel.Products);
+            var outModel = _outModelProvider.CreateOutModel();
 
-            result.FinalCost =  GetFinalCost(inputModel.Products, productsWithTax);
+            var productsWithTax = GetTaxedProducts(inputModel.Products);
 
-            result.ProductsOut = productsWithTax;
+            outModel.ProductsOut = productsWithTax;
 
-            return (result);
+            outModel.FinalCost = GetFinalCost(inputModel.Products, productsWithTax);
 
+            return outModel;
         }
         #endregion
-
         #region Private Methods     
-        public async IEnumerable<ProductOut> TaxProcessing(IEnumerable<IProductIn> products)
-        {            
-                List<ProductOut> ListTaxedProducts = new List<ProductOut>();
-                foreach (var p in products)
-                {
-                    var product = new ProductOut();
-                    product.Name = p.Name;
-                    // with ExtraTax??
-                    if (p.STax)
-                    {
-                        product.Cost = Math.Round((p.Cost / 100) * 107,2);
-                    }
-                    else
-                    {
-                        product.Cost = Math.Round(p.Cost,2);
-                    }
-                    ListTaxedProducts.Add(product);
-                }
-                return ListTaxedProducts;          
-        }
-
-        public double GetFinalCost(IEnumerable<IProductIn> products, IEnumerable<IProductOut> productsWithTax)
+        private IEnumerable<OutProduct> GetTaxedProducts(IEnumerable<InProduct> products)
         {
-            double finalCost = 0;
-                List<IProductOut> ListTaxedProducts = new List<IProductOut>();
-                foreach (var p in products)
+            var taxedProducts = new List<OutProduct>();
+
+            foreach (var p in products)
+            {
+                var taxedProduct = new OutProduct();
+                taxedProduct.Name = p.Name;
+                if (p.GetType() != typeof(IExemptProduct))
                 {
-                    var product = new ProductOut();
-                    // with ExtraMargin??
-                    if (E_Margin)
-                    {
-                        product.Cost = Math.Round((p.Cost / 100) * 116,2);
-                    }
-                    else
-                    {
-                        product.Cost = Math.Round((p.Cost / 100) * 111,2);
-                    }
-                    ListTaxedProducts.Add(product);
+                    taxedProduct.Cost = Math.Round((p.Cost / 100) * 107, 2);
                 }
-
-            double costProduct = 0;
-            foreach(var p in products)
-            {
-                costProduct += p.Cost;
+                else
+                {
+                    taxedProduct.Cost = Math.Round(p.Cost, 2);
+                }
+                taxedProducts.Add(taxedProduct);
             }
-
-            double costProductWithTax = 0;
-            foreach (var p in productsWithTax)
-            {
-                costProductWithTax += p.Cost;
-            }
-
-            var additionalTax = costProductWithTax - costProduct;
-
-            var taxedProducts = ListTaxedProducts;
-
-            double costWithMaring = 0;
-            foreach (var p in taxedProducts)
-            {
-                costWithMaring += p.Cost;
-            }
-
-            finalCost = costWithMaring + additionalTax;
-
-            return Math.Round(finalCost,2);
+            return taxedProducts;
         }
+        private double GetFinalCost(IEnumerable<IProduct> products, IEnumerable<IProduct> productsWithTax)
+        {
+            var ListProductsWithMargin = GetProductsWithMargin(products);
 
+            var costProducts = products.Sum(x => x.Cost);
+            var costProductsWithTax = productsWithTax.Sum(x => x.Cost);
+
+            var tax = costProductsWithTax - costProducts;
+            var costWithMaring = ListProductsWithMargin.Sum(x => x.Cost);
+
+            var finalCost = costWithMaring + tax;
+
+            return Math.Round(finalCost, 2);
+        }
+        private List<IProduct> GetProductsWithMargin(IEnumerable<IProduct> products)
+        {
+            List<IProduct> ListProductsWithMargin = new List<IProduct>();
+            foreach (var p in products)
+            {
+                var product = new OutProduct();
+                if (E_Margin)
+                {
+                    product.Cost = Math.Round((p.Cost / 100) * 116, 2);
+                }
+                else
+                {
+                    product.Cost = Math.Round((p.Cost / 100) * 111, 2);
+                }
+                ListProductsWithMargin.Add(product);
+            }
+            return ListProductsWithMargin;
+        }
         #endregion
     }
 }

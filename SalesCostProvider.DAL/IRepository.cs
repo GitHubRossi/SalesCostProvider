@@ -8,9 +8,8 @@ namespace SalesCostProvider.DAL
 {
     public interface IRepository
     {
-        public Task<ResultModel> ResultModelSaving(ResultModel resultModel);
-        public Task<ResultModel> IncomeModelSaving(InComeModel incomeModel);
-
-        public Task<IEnumerable<IInComeModel>> GetIncomeModels();
+        public Task<bool> ResultModelSaving(OutModel resultModel);
+        public Task<bool> IncomeModelSaving(InComeModel incomeModel);
+        public Task<IEnumerable<InComeModel>> GetIncomeModels();
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SalesCostProvider.DAL;
 using SalesCostProvider.SL.Services;
+using SalesCostProvider.SL.Services.Providers;
 
 namespace SalesCostProvider.Test
 {
@@ -13,9 +14,11 @@ namespace SalesCostProvider.Test
         {
             var services = new ServiceCollection();
 
-            services.AddScoped<ICostProvider, CostProvider>();
+            services.AddScoped<IRepository, Repository>();
 
-            services.AddScoped<IRepository,Repository>();
+            services.AddScoped<IOutModelProvider, OutModelProvider>();
+
+            services.AddScoped<ICostProvider, CostProvider>();
 
             services.AddScoped<IServicesSL, ServicesSL>();
 
