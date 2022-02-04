@@ -1,10 +1,10 @@
 README.md
 
+TaskDescription can be found at SRC\
+
 CostProviderAPI accepts JSON via POST method on: 
 https://localhost:44340/CostProviderAPI/CostProductsProvider
 
-
-TaskDescription in SRC\
 
 See JSON IN/OUT structure
 
